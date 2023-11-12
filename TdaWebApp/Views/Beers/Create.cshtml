@@ -1,0 +1,80 @@
+﻿@model TdaWebApp.Models.Beers
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Combination</h1>
+
+<h4>Criteria/h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Drugs:</label>
+                <div class="col-md-10">
+                    @foreach (var beer in ViewBag.BeersList)
+                    {
+                        <div class="checkbox">
+                            <label asp-for="Drug">
+                                <input asp-for="Drug" type="checkbox" name="SelectedDrugs" value="@beer.Drug" />
+                                @beer.Drug + @beer.DrugClass
+                            </label>
+                            <span asp-validation-for="Drug" class="text-danger"></span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                <label asp-for="Drug" class="control-label"></label>
+                <input asp-for="Drug" class="form-control" />
+                <span asp-validation-for="Drug" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="DrugClass" class="control-label"></label>
+                <input asp-for="DrugClass" class="form-control" />
+                <span asp-validation-for="DrugClass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Recommendation" class="control-label"></label>
+                <input asp-for="Recommendation" class="form-control" />
+                <span asp-validation-for="Recommendation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rationale" class="control-label"></label>
+                <input asp-for="Rationale" class="form-control" />
+                <span asp-validation-for="Rationale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QualityEvidence" class="control-label"></label>
+                <input asp-for="QualityEvidence" class="form-control" />
+                <span asp-validation-for="QualityEvidence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StrengthRecommendation" class="control-label"></label>
+                <input asp-for="StrengthRecommendation" class="form-control" />
+                <span asp-validation-for="StrengthRecommendation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Condition" class="control-label"></label>
+                <input asp-for="Condition" class="form-control" />
+                <span asp-validation-for="Condition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

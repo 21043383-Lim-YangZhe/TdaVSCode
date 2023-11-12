@@ -1,0 +1,132 @@
+﻿
+@model IEnumerable<TdaWebApp.Models.Beers>
+
+@{
+    ViewData["Title"] = "Beers Table";
+}
+
+<h1>Beers Table</h1>
+
+<p>
+    <a asp-action="Create">Create New Combination</a>
+</p>
+
+
+<div>
+    <form asp-action="Index" asp-route-searchTerm="@ViewData["SearchTerm"]" method="get">
+        <label for="searchTerm">Search:</label>
+        <input type="text" id="searchTerm" name="searchTerm" />
+        <input type="submit" value="Search" />
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugID)
+                @Html.ActionLink("▲", "Index", new { sortOrder = "asc", sortBy = "DrugID" })
+                @Html.ActionLink("▼", "Index", new { sortOrder = "desc", sortBy = "DrugID" })
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Drug)
+                @Html.ActionLink("▲", "Index", new { sortOrder = "asc", sortBy = "Drug" })
+                @Html.ActionLink("▼", "Index", new { sortOrder = "desc", sortBy = "Drug" })
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DrugClass)
+                @Html.ActionLink("▲", "Index", new { sortOrder = "asc", sortBy = "DrugClass" })
+                @Html.ActionLink("▼", "Index", new { sortOrder = "desc", sortBy = "DrugClass" })
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Crcl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Disease)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Recommendation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rationale)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QualityEvidence)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StrengthRecommendation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Condition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InteractingDrugOrClass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dosage)
+            </th>
+            <th scope="col" width="20%">Actions</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrugID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Drug)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrugClass)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Crcl)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Disease)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recommendation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Rationale)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QualityEvidence)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StrengthRecommendation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Condition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InteractingDrugOrClass)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dosage)
+            </td>
+            @*<td>
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            </td>*@
+                <td width="20%">
+                    <a asp-action="BookingEdit" asp-route-id="@item.Id">Update</a>
+                    <a asp-action="BookingDelete" asp-route-id="@item.Id">Delete</a>
+                </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+

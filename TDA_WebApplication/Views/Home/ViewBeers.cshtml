@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TDA_WebApplication.Models.Beers>
+@{
+    ViewData["Title"] = "View Beers";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <br />
+    <br />
+    <table class="table">
+        <tdead>
+            <tr>
+                <th>Drug ID</th>
+                <th>Drug Class</th>
+                <th>Crcl</th>
+                <th>Recommendation</th>
+            </tr>
+        </tdead>
+        <tbody>
+            @foreach (Beers item in Model)
+            {
+                <tr>
+                    <td>@item.DrugID</td>
+                    <td>@item.DrugClass</td>
+                    <td>@item.Crcl</td>
+                    <td>@item.Recommendation</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
