@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using TdaWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using TdaWebApp.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TdaWebApp.Controllers
 {
@@ -55,7 +56,7 @@ namespace TdaWebApp.Controllers
 
              return View(beers);
          }*/
-
+        [Authorize]
         public ActionResult Index(string searchTerm, string sortOrder, string sortBy)
         {
             IEnumerable<Beers> beers;
@@ -131,7 +132,7 @@ namespace TdaWebApp.Controllers
         }
 
         // POST: BeersController/Create
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Beers beers, string[] SelectedDrugs)
         {
@@ -143,7 +144,44 @@ namespace TdaWebApp.Controllers
 
             ViewBag.BeersList = beersService.Get(); //
             return View(beers);
+        }*/
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Beers beers, string[] SelectedDrugs)
+        {
+            if (ModelState.IsValid)
+            {
+                // Combine DrugIDs from selected drugs
+                string combinedDrugIds = string.Join(", ", SelectedDrugs.Select(drug => GetDrugIdFromName(drug)));
+
+                // Set the combined DrugID to the beers object
+                beers.DrugID = combinedDrugIds;
+
+                // Create the beers object
+                beersService.Create(beers);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            ViewBag.BeersList = beersService.Get();
+            return View(beers);
         }
+
+        // Helper method to get DrugID from drug name
+        private string GetDrugIdFromName(string drugName)
+        {
+            // Logic to generate DrugID based on drug name, you can customize this logic
+            // For simplicity, let's assume the DrugID is a concatenation of the first letter of each word in the drug name
+            string[] words = drugName.Split(' ');
+            string drugId = string.Join("_", words.Select(word => word[0].ToString().ToLower()));
+
+            return drugId;
+        }
+
+
+
+
 
         // GET: BeersController/Edit/5
         public ActionResult Edit(int id)

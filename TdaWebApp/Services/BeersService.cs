@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using MongoDB.Driver;
-using TdaWebApp.Models;
 using MongoDB.Bson;
 using System.Text.RegularExpressions;
+using MongoDB.Driver;
+using TdaWebApp.Models;
 
 namespace TdaWebApp.Services
 {
