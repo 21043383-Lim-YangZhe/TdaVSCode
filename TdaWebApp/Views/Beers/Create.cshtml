@@ -13,6 +13,8 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+
+
             <div class="form-group">
                 <label class="control-label col-md-2">Select Drugs:</label>
                 <div class="col-md-10">
@@ -20,7 +22,7 @@
                     {
                         <div class="checkbox">
                             <label asp-for="DrugID">
-                                <input asp-for="DrugID" type="checkbox" name="Selected Drugs" value="@beer.DrugID" />
+                                <input asp-for="DrugID" type="checkbox" name="SelectedDrugs" value="@beer.DrugID" />
                                 @beer.Drug + @beer.DrugClass + @beer.DrugID
                             </label>
                             <span asp-validation-for="DrugID" class="text-danger"></span>
@@ -29,16 +31,11 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Drug" class="control-label"></label>
-                <input asp-for="Drug" class="form-control" />
-                <span asp-validation-for="Drug" class="text-danger"></span>
+
+            <div class="validation-summary-errors text-danger">
+                @Html.ValidationMessage("DuplicateRecord")
             </div>
-            <div class="form-group">
-                <label asp-for="DrugClass" class="control-label"></label>
-                <input asp-for="DrugClass" class="form-control" />
-                <span asp-validation-for="DrugClass" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="Recommendation" class="control-label"></label>
                 <input asp-for="Recommendation" class="form-control" />
@@ -58,11 +55,6 @@
                 <label asp-for="StrengthRecommendation" class="control-label"></label>
                 <input asp-for="StrengthRecommendation" class="form-control" />
                 <span asp-validation-for="StrengthRecommendation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Condition" class="control-label"></label>
-                <input asp-for="Condition" class="form-control" />
-                <span asp-validation-for="Condition" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -18,15 +18,14 @@ namespace TdaWebApp.Models
 
         [JsonPropertyName("id")]
         [BsonElement("id")]
-        public string DrugID { get; set; } = null!;
-
+        public string? DrugID { get; set; }
         [JsonPropertyName("drug")]
         [BsonElement("drug")]
-        public string Drug { get; set; } = null!;
+        public string? Drug { get; set; }
 
         [JsonPropertyName("class")]
         [BsonElement("class")]
-        public string DrugClass { get; set; } = null!;
+        public string? DrugClass { get; set; }
 
         [JsonPropertyName("crcl")]
         [BsonElement("crcl")]

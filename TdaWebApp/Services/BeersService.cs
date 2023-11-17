@@ -29,10 +29,31 @@ namespace TdaWebApp.Services
             return beers.Find(beer => beer.Id == id).FirstOrDefault();
         }
 
+        //public Beers Create(Beers beer)
+        //{
+        //    beers.InsertOne(beer);
+        //    return beer;
+        //}
+
         public Beers Create(Beers beer)
         {
-            beers.InsertOne(beer);
-            return beer;
+            try
+            {
+                beers.InsertOne(beer);
+                return beer;
+            }
+            catch (MongoWriteException ex)
+            {
+                if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    // Handle duplicate key error, e.g., log it or return an error message
+                    // You can also customize the error message based on your needs
+                    throw new DuplicateKeyException("A record with the same criteria already exists.", ex);
+                }
+
+                // If it's not a duplicate key error, rethrow the exception
+                throw;
+            }
         }
 
         public void Update(string id, Beers beersIn)

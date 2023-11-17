@@ -132,19 +132,19 @@ namespace TdaWebApp.Controllers
         }
 
         // POST: BeersController/Create
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(Beers beers, string[] SelectedDrugs)
-        {
-            if (ModelState.IsValid)
-            {
-                beersService.Create(beers);
-                return RedirectToAction(nameof(Index));
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(Beers beers, string[] SelectedDrugs)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        beersService.Create(beers);
+        //        return RedirectToAction(nameof(Index));
+        //    }
 
-            ViewBag.BeersList = beersService.Get(); //
-            return View(beers);
-        }*/
+        //    ViewBag.BeersList = beersService.Get(); //
+        //    return View(beers);
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -152,33 +152,45 @@ namespace TdaWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Combine DrugIDs from selected drugs
-                string combinedDrugIds = string.Join(", ", SelectedDrugs.Select(drug => GetDrugIdFromName(drug)));
-
-                // Set the combined DrugID to the beers object
-                beers.DrugID = combinedDrugIds;
-
-                // Create the beers object
-                beersService.Create(beers);
-
-                return RedirectToAction(nameof(Index));
+                // Assuming you have a method to check for duplicate records
+                if (IsDuplicateRecord(beers))
+                {
+                    ModelState.AddModelError("DuplicateRecord", "A record with the same criteria already exists.");
+                }
+                else
+                {
+                    // Assuming you have a method to retrieve a concatenated string of drug IDs
+                    beers.DrugID = GetSelectedDrugIDs(SelectedDrugs);
+                    beersService.Create(beers);
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
             ViewBag.BeersList = beersService.Get();
             return View(beers);
         }
 
-        // Helper method to get DrugID from drug name
-        private string GetDrugIdFromName(string drugName)
+        // Helper method to concatenate selected drug IDs
+        private string GetSelectedDrugIDs(string[] selectedDrugs)
         {
-            // Logic to generate DrugID based on drug name, you can customize this logic
-            // For simplicity, let's assume the DrugID is a concatenation of the first letter of each word in the drug name
-            string[] words = drugName.Split(' ');
-            string drugId = string.Join("_", words.Select(word => word[0].ToString().ToLower()));
-
-            return drugId;
+            // Concatenate selected drug IDs with a comma separator
+            return string.Join(",", selectedDrugs);
         }
 
+        // Helper method to check for duplicate records
+        private bool IsDuplicateRecord(Beers beers)
+        {
+            // Implement logic to check for duplicate records based on criteria
+            // For example, check if a record with the same criteria already exists in the database
+            // You may need to modify this logic based on your data model and database structure
+
+            var existingRecord = beersService.Get().FirstOrDefault(b =>
+                b.DrugID == beers.DrugID
+                // Add additional conditions for other criteria if needed
+            );
+
+            return existingRecord != null;
+        }
 
 
 
