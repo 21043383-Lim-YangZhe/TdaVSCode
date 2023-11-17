@@ -46,7 +46,7 @@ namespace TdaWebApp.Services
             {
                 if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
                 {
-                    // Handle duplicate key error, e.g., log it or return an error message
+                    // Handle duplicate key error, e.g, log it or return an error message
                     // You can also customize the error message based on your needs
                     throw new DuplicateKeyException("A record with the same criteria already exists.", ex);
                 }
