@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
-using MongoDB.Driver;
 using MongoDB.Bson;
 using System.Text.RegularExpressions;
 using TdaWebApp.Models;
+using MongoDB.Driver;
 using Microsoft.AspNetCore.Mvc;
 using TdaWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -20,42 +20,6 @@ namespace TdaWebApp.Controllers
             this.beersService = beersService;
         }
 
-        /*// GET: BeersController
-        public ActionResult Index()
-        {
-            return View(beersService.Get());
-        }*/
-        /* public ActionResult Index(string searchTerm)
-         {
-             IEnumerable<Beers> beers;
-
-             if (!string.IsNullOrEmpty(searchTerm))
-             {
-                 // Filter records based on the search term
-                 beers = beersService.Get().Where(b =>
-                     b.DrugID?.Contains(searchTerm) == true ||
-                     b.Drug?.Contains(searchTerm) == true ||
-                     b.DrugClass?.Contains(searchTerm) == true ||
-                     b.Crcl?.Contains(searchTerm) == true ||
-                     b.Disease?.Contains(searchTerm) == true ||
-                     b.Recommendation?.Contains(searchTerm) == true ||
-                     b.Rationale?.Contains(searchTerm) == true ||
-                     b.QualityEvidence?.Contains(searchTerm) == true ||
-                     b.StrengthRecommendation?.Contains(searchTerm) == true ||
-                     b.Condition?.Contains(searchTerm) == true ||
-                     b.Age?.Contains(searchTerm) == true ||
-                     b.InteractingDrugOrClass?.Contains(searchTerm) == true ||
-                     b.Dosage?.Contains(searchTerm) == true
-                 );
-             }
-             else
-             {
-                 // If no search term provided, get all records
-                 beers = beersService.Get();
-             }
-
-             return View(beers);
-         }*/
         [Authorize]
         public ActionResult Index(string searchTerm, string sortOrder, string sortBy)
         {
@@ -131,18 +95,20 @@ namespace TdaWebApp.Controllers
             return View();
         }
 
-        // POST: BeersController/Create
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public ActionResult Create(Beers beers, string[] SelectedDrugs)
         //{
         //    if (ModelState.IsValid)
         //    {
+        //        // Assuming you have a method to retrieve a concatenated string of drug IDs
+        //        beers.DrugID = GetSelectedDrugIDs(SelectedDrugs);
         //        beersService.Create(beers);
         //        return RedirectToAction(nameof(Index));
         //    }
 
-        //    ViewBag.BeersList = beersService.Get(); //
+        //    ViewBag.BeersList = beersService.Get();
         //    return View(beers);
         //}
 
@@ -150,25 +116,44 @@ namespace TdaWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(Beers beers, string[] SelectedDrugs)
         {
-            if (ModelState.IsValid)
+            try
             {
-                // Assuming you have a method to check for duplicate records
+                // Check for duplicate record
                 if (IsDuplicateRecord(beers))
                 {
-                    ModelState.AddModelError("DuplicateRecord", "A record with the same criteria already exists.");
+                    ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
+                    ViewBag.BeersList = beersService.Get();
+                    return View(beers);
                 }
-                else
+
+                if (ModelState.IsValid)
                 {
                     // Assuming you have a method to retrieve a concatenated string of drug IDs
                     beers.DrugID = GetSelectedDrugIDs(SelectedDrugs);
                     beersService.Create(beers);
                     return RedirectToAction(nameof(Index));
                 }
-            }
 
-            ViewBag.BeersList = beersService.Get();
-            return View(beers);
+                ViewBag.BeersList = beersService.Get();
+                return View(beers);
+            }
+            catch (MongoWriteException ex)
+            {
+                // Handle MongoDB duplicate key error
+                if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
+                    ViewBag.BeersList = beersService.Get();
+                    return View(beers);
+                }
+
+                // Handle other MongoDB write errors if needed
+                throw; // Re-throw the exception for other unexpected errors
+            }
         }
+
+
+
 
         // Helper method to concatenate selected drug IDs
         private string GetSelectedDrugIDs(string[] selectedDrugs)
@@ -182,8 +167,6 @@ namespace TdaWebApp.Controllers
         {
             // Implement logic to check for duplicate records based on criteria
             // For example, check if a record with the same criteria already exists in the database
-            // You may need to modify this logic based on your data model and database structure
-
             var existingRecord = beersService.Get().FirstOrDefault(b =>
                 b.DrugID == beers.DrugID
                 // Add additional conditions for other criteria if needed

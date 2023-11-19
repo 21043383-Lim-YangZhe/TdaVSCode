@@ -1,4 +1,4 @@
-﻿@model TdaWebApp.Models.Beers
+﻿@* @model TdaWebApp.Models.Beers
 
 @{
     ViewData["Title"] = "Create";
@@ -6,14 +6,15 @@
 
 <h1>Create Combination</h1>
 
+
 <h4>Criteria</h4>
 <hr />
+<div asp-validation-summary="All" class="text-danger"></div>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-
 
             <div class="form-group">
                 <label class="control-label col-md-2">Select Drugs:</label>
@@ -32,10 +33,6 @@
             </div>
 
 
-            <div class="validation-summary-errors text-danger">
-                @Html.ValidationMessage("DuplicateRecord")
-            </div>
-
             <div class="form-group">
                 <label asp-for="Recommendation" class="control-label"></label>
                 <input asp-for="Recommendation" class="form-control" />
@@ -48,14 +45,23 @@
             </div>
             <div class="form-group">
                 <label asp-for="QualityEvidence" class="control-label"></label>
-                <input asp-for="QualityEvidence" class="form-control" />
+                <select asp-for="QualityEvidence" class="form-control">
+                    <option value="Low">Low</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="High">High</option>
+                </select>
                 <span asp-validation-for="QualityEvidence" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="StrengthRecommendation" class="control-label"></label>
-                <input asp-for="StrengthRecommendation" class="form-control" />
+                <select asp-for="StrengthRecommendation" class="form-control">
+                    <option value="Strong">Strong</option>
+                    <option value="Weak">Weak</option>
+                </select>
                 <span asp-validation-for="StrengthRecommendation" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -69,4 +75,86 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
+
+
+
+@model TdaWebApp.Models.Beers
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Combination</h1>
+
+<h4>Criteria</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Select Drugs:</label>
+                <div class="col-md-10">
+                    @foreach (var beer in ((IEnumerable<TdaWebApp.Models.Beers>)ViewBag.BeersList).Where(b => !b.DrugID.Contains(',')))
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="SelectedDrugs" value="@beer.DrugID" />
+                                @beer.Drug + @beer.DrugClass + @beer.DrugID
+                            </label>
+                            <span asp-validation-for="DrugID" class="text-danger"></span>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Recommendation" class="control-label"></label>
+                <input asp-for="Recommendation" class="form-control" />
+                <span asp-validation-for="Recommendation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rationale" class="control-label"></label>
+                <input asp-for="Rationale" class="form-control" />
+                <span asp-validation-for="Rationale" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QualityEvidence" class="control-label"></label>
+                <select asp-for="QualityEvidence" class="form-control">
+                    <option value="Low">Low</option>
+                    <option value="Moderate">Moderate</option>
+                    <option value="High">High</option>
+                </select>
+                <span asp-validation-for="QualityEvidence" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="StrengthRecommendation" class="control-label"></label>
+                <select asp-for="StrengthRecommendation" class="form-control">
+                    <option value="Strong">Strong</option>
+                    <option value="Weak">Weak</option>
+                </select>
+                <span asp-validation-for="StrengthRecommendation" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
