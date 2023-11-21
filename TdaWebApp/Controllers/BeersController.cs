@@ -112,12 +112,61 @@ namespace TdaWebApp.Controllers
         //    return View(beers);
         //}
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Create(Beers beers, string[] SelectedDrugs)
+        //{
+        //    try
+        //    {
+        //        // Check for duplicate record
+        //        if (IsDuplicateRecord(beers))
+        //        {
+        //            ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
+        //            ViewBag.BeersList = beersService.Get();
+        //            return View(beers);
+        //        }
+
+        //        if (ModelState.IsValid)
+        //        {
+        //            // Assuming you have a method to retrieve a concatenated string of drug IDs
+        //            beers.DrugID = GetSelectedDrugIDs(SelectedDrugs);
+        //            beersService.Create(beers);
+        //            return RedirectToAction(nameof(Index));
+        //        }
+
+        //        ViewBag.BeersList = beersService.Get();
+        //        return View(beers);
+        //    }
+        //    catch (MongoWriteException ex)
+        //    {
+        //        // Handle MongoDB duplicate key error
+        //        if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+        //        {
+        //            ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
+        //            ViewBag.BeersList = beersService.Get();
+        //            return View(beers);
+        //        }
+
+        //        // Handle other MongoDB write errors if needed
+        //        throw; // Re-throw the exception for other unexpected errors
+        //    }
+        //}
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Beers beers, string[] SelectedDrugs)
         {
             try
             {
+                // Validate selected drug IDs
+                if (SelectedDrugs == null || SelectedDrugs.Length < 2)
+                {
+                    ModelState.AddModelError(string.Empty, "Please select at least two drugs.");
+                    ViewBag.BeersList = beersService.Get();
+                    return View(beers);
+                }
+
                 // Check for duplicate record
                 if (IsDuplicateRecord(beers))
                 {
@@ -163,13 +212,25 @@ namespace TdaWebApp.Controllers
         }
 
         // Helper method to check for duplicate records
+        //private bool IsDuplicateRecord(Beers beers)
+        //{
+        //    // Implement logic to check for duplicate records based on criteria
+        //    // For example, check if a record with the same criteria already exists in the database
+        //    var existingRecord = beersService.Get().FirstOrDefault(b =>
+        //        b.DrugID == beers.DrugID
+        //    // Add additional conditions for other criteria if needed
+        //    );
+
+        //    return existingRecord != null;
+        //}
+
+        // Helper method to check for duplicate records
+        // Helper method to check for duplicate records based on DrugID
         private bool IsDuplicateRecord(Beers beers)
         {
-            // Implement logic to check for duplicate records based on criteria
-            // For example, check if a record with the same criteria already exists in the database
+            // Check if a record with the same DrugID already exists
             var existingRecord = beersService.Get().FirstOrDefault(b =>
                 b.DrugID == beers.DrugID
-                // Add additional conditions for other criteria if needed
             );
 
             return existingRecord != null;
@@ -178,26 +239,108 @@ namespace TdaWebApp.Controllers
 
 
 
+
+
+
+
         // GET: BeersController/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var beer = beersService.Get(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.BeersList = beersService.Get(); // Make sure to set ViewBag.BeersList
+            return View(beer);
         }
 
-        // POST: BeersController/Edit/5
+
+
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(string id, Beers beer, string[] SelectedDrugs)
+        //{
+        //    if (id != beer.Id)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        // Update other properties of the beer object as needed
+
+        //        // Assuming you have a method to retrieve a concatenated string of drug IDs
+        //        beer.DrugID = GetSelectedDrugIDs(SelectedDrugs);
+
+        //        beersService.Update(id, beer);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    else
+        //    {
+        //        return View(beer);
+        //    }
+        //}
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(string id, Beers updatedBeer, string[] SelectedDrugs)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                if (id != updatedBeer.Id)
+                {
+                    return NotFound();
+                }
+
+                // Check for duplicate record
+                if (IsDuplicateRecord(updatedBeer))
+                {
+                    ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
+                    ViewBag.BeersList = beersService.Get();
+                    return View(updatedBeer);
+                }
+
+                if (ModelState.IsValid)
+                {
+                    // Assuming you have a method to retrieve a concatenated string of drug IDs
+                    updatedBeer.DrugID = GetSelectedDrugIDs(SelectedDrugs);
+
+                    // Use the Update method to update the existing record
+                    beersService.Update(id, updatedBeer);
+
+                    return RedirectToAction(nameof(Index));
+                }
+
+                ViewBag.BeersList = beersService.Get();
+                return View(updatedBeer);
             }
-            catch
+            catch (MongoWriteException ex)
             {
-                return View();
+                // Handle MongoDB duplicate key error
+                if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
+                    ViewBag.BeersList = beersService.Get();
+                    return View(updatedBeer);
+                }
+
+                // Handle other MongoDB write errors if needed
+                throw; // Re-throw the exception for other unexpected errors
             }
         }
+
+
+
+
 
         // GET: BeersController/Delete/5
         public ActionResult Delete(int id)

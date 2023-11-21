@@ -120,8 +120,8 @@
                     @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>*@
                 <td width="20%">
-                    <a asp-action="BookingEdit" asp-route-id="@item.Id">Update</a>
-                    <a asp-action="BookingDelete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Update</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
         </tr>
 }

@@ -1,36 +1,43 @@
 ﻿@* @model TdaWebApp.Models.Beers
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create Combination</h1>
+<h1>Edit</h1>
 
-<h4>Criteria</h4>
+<h4>Beers</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
             <div class="form-group">
-                <label class="control-label col-md-2">Select Drugs:</label>
-                <div class="col-md-10">
-                    @foreach (var beer in ((IEnumerable<TdaWebApp.Models.Beers>)ViewBag.BeersList).Where(b => !b.DrugID.Contains(',')))
-                    {
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="SelectedDrugs" value="@beer.DrugID" />
-                                @beer.Drug + @beer.DrugClass + @beer.DrugID
-                            </label>
-                            <span asp-validation-for="DrugID" class="text-danger"></span>
-                        </div>
-                    }
-                </div>
+                <label asp-for="DrugID" class="control-label"></label>
+                <input asp-for="DrugID" class="form-control" />
+                <span asp-validation-for="DrugID" class="text-danger"></span>
             </div>
-
-
+            <div class="form-group">
+                <label asp-for="Drug" class="control-label"></label>
+                <input asp-for="Drug" class="form-control" />
+                <span asp-validation-for="Drug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DrugClass" class="control-label"></label>
+                <input asp-for="DrugClass" class="form-control" />
+                <span asp-validation-for="DrugClass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Crcl" class="control-label"></label>
+                <input asp-for="Crcl" class="form-control" />
+                <span asp-validation-for="Crcl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Disease" class="control-label"></label>
+                <input asp-for="Disease" class="form-control" />
+                <span asp-validation-for="Disease" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Recommendation" class="control-label"></label>
                 <input asp-for="Recommendation" class="form-control" />
@@ -43,25 +50,36 @@
             </div>
             <div class="form-group">
                 <label asp-for="QualityEvidence" class="control-label"></label>
-                <select asp-for="QualityEvidence" class="form-control">
-                    <option value="Low">Low</option>
-                    <option value="Moderate">Moderate</option>
-                    <option value="High">High</option>
-                </select>
+                <input asp-for="QualityEvidence" class="form-control" />
                 <span asp-validation-for="QualityEvidence" class="text-danger"></span>
             </div>
-
             <div class="form-group">
                 <label asp-for="StrengthRecommendation" class="control-label"></label>
-                <select asp-for="StrengthRecommendation" class="form-control">
-                    <option value="Strong">Strong</option>
-                    <option value="Weak">Weak</option>
-                </select>
+                <input asp-for="StrengthRecommendation" class="form-control" />
                 <span asp-validation-for="StrengthRecommendation" class="text-danger"></span>
             </div>
-
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <label asp-for="Condition" class="control-label"></label>
+                <input asp-for="Condition" class="form-control" />
+                <span asp-validation-for="Condition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Age" class="control-label"></label>
+                <input asp-for="Age" class="form-control" />
+                <span asp-validation-for="Age" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InteractingDrugOrClass" class="control-label"></label>
+                <input asp-for="InteractingDrugOrClass" class="form-control" />
+                <span asp-validation-for="InteractingDrugOrClass" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dosage" class="control-label"></label>
+                <input asp-for="Dosage" class="form-control" />
+                <span asp-validation-for="Dosage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -72,30 +90,25 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-} *@
-
-
-
-
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+ *@
 
 
 
 @model TdaWebApp.Models.Beers
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create Combination</h1>
+<h1>Edit Combination</h1>
 
 <h4>Criteria - The Drugs are listed in this format (Drug Name | Drug Class | Drug ID)</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -114,9 +127,10 @@
                         <div class="col-md-10">
                             @foreach (var beer in tableDrugs)
                             {
+                                var isChecked = Model.DrugID != null && Model.DrugID.Split(',').Any(d => d.Trim() == beer.DrugID.Trim());
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="SelectedDrugs" value="@beer.DrugID" />
+                                        <input type="checkbox" name="SelectedDrugs" value="@beer.DrugID" @(isChecked ? "checked" : "") />
                                         @beer.Drug + @beer.DrugClass + @beer.DrugID
                                     </label>
                                     <span asp-validation-for="DrugID" class="text-danger"></span>
@@ -126,7 +140,6 @@
                     </div>
                 }
             }
-
 
 
             <div class="form-group">
@@ -158,8 +171,9 @@
                 <span asp-validation-for="StrengthRecommendation" class="text-danger"></span>
             </div>
             <br />
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save Changes" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -174,5 +188,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
-
