@@ -71,7 +71,7 @@ namespace TdaWebApp.Services
                 if (!ObjectId.TryParse(beer.Id, out _))
                 {
                     beer.Id = ObjectId.GenerateNewId().ToString();
-                }
+                };
             }
 
             beers.InsertMany(beersList);
