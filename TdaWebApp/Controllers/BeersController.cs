@@ -7,6 +7,7 @@ using MongoDB.Driver;
 using Microsoft.AspNetCore.Mvc;
 using TdaWebApp.Services;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
 
 namespace TdaWebApp.Controllers
 {
@@ -147,7 +148,6 @@ namespace TdaWebApp.Controllers
 
 
 
-
         // Helper method to concatenate selected drug IDs
         private string GetSelectedDrugIDs(string[] selectedDrugs)
         {
@@ -168,7 +168,6 @@ namespace TdaWebApp.Controllers
             // If there are any existing records with the same set of DrugIDs, it means there is a duplicate record
             return existingRecordsWithSameDrugIDs.Any();
         }
-
 
 
 
@@ -341,6 +340,43 @@ namespace TdaWebApp.Controllers
                 return View();
             }
         }
+
+
+        public ActionResult UploadJSON()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UploadJSON(IFormFile file)
+        {
+            try
+            {
+                if (file != null && file.Length > 0)
+                {
+                    using (var reader = new StreamReader(file.OpenReadStream()))
+                    {
+                        var jsonContent = reader.ReadToEnd();
+                        // Assuming your BeersService has a method to insert data from JSON
+                        beersService.InsertFromJson(jsonContent);
+                    }
+
+                    ViewBag.Message = "File uploaded successfully.";
+                }
+                else
+                {
+                    ViewBag.Message = "Please select a file.";
+                }
+
+                return View("UploadJSON");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Error: {ex.Message}";
+                return View("UploadJSON");
+            }
+        }
+
 
 
     }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http.HttpResults;
 using MongoDB.Driver;
 using TdaWebApp.Models;
+using Newtonsoft.Json;
 
 namespace TdaWebApp.Services
 {
@@ -53,6 +54,27 @@ namespace TdaWebApp.Services
             beers.DeleteOne(beer => beer.Id == id);
         }
 
+        //public void InsertFromJson(string jsonContent)
+        //{
+        //    // Deserialize JSON content and insert data into MongoDB
+        //    var beersList = JsonConvert.DeserializeObject<List<Beers>>(jsonContent);
+        //    beers.InsertMany(beersList);
+        //}
 
+        public void InsertFromJson(string jsonContent)
+        {
+            var beersList = JsonConvert.DeserializeObject<List<Beers>>(jsonContent);
+
+            foreach (var beer in beersList)
+            {
+                // Check if the Id is a valid ObjectId; if not, generate a new one
+                if (!ObjectId.TryParse(beer.Id, out _))
+                {
+                    beer.Id = ObjectId.GenerateNewId().ToString();
+                }
+            }
+
+            beers.InsertMany(beersList);
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace TdaWebApp.Models
         [BsonId]
         [BsonElement("_id")]
         [JsonPropertyName("_id")]
+        [BsonIgnoreIfDefault]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 

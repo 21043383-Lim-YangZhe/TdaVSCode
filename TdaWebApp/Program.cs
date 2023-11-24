@@ -1,6 +1,10 @@
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
-using System.Configuration;
 using TdaWebApp.Models;
 using TdaWebApp.Services;
 using TdaWebApp.Settings;
@@ -12,13 +16,6 @@ builder.Services.AddControllersWithViews();*/
 
 // Add services to the container.
 builder.Services.AddSingleton<BeersService>();
-//
-/*builder.Services.AddSingleton<IMongoClient>(sp => new MongoClient("mongodb://localhost:27017"));
-builder.Services.AddScoped<IMongoDatabase>(sp =>
-{
-    var client = sp.GetRequiredService<IMongoClient>();
-    return client.GetDatabase("mydb");
-});*/
 
 
 var Configuration = builder.Configuration;
@@ -30,11 +27,9 @@ var mongoDbSettings = Configuration.GetSection(nameof(MongoDbConfig)).Get<MongoD
             mongoDbSettings.ConnectionString, mongoDbSettings.Name
         );
 
-//
-/*builder.Services.AddControllers()
-    .AddJsonOptions(
-        options => options.JsonSerializerOptions.PropertyNamingPolicy = null);*/
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); //
+builder.Services.AddMvc(); //
 
 var app = builder.Build();
 
