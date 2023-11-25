@@ -125,6 +125,10 @@ namespace TdaWebApp.Controllers
                     // Assuming you have a method to retrieve a concatenated string of drug IDs
                     beers.DrugID = GetSelectedDrugIDs(SelectedDrugs);
                     beersService.Create(beers);
+
+                    // Set a success message in TempData
+                    TempData["SuccessMessage"] = "Record created successfully.";
+
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -145,6 +149,7 @@ namespace TdaWebApp.Controllers
                 throw; // Re-throw the exception for other unexpected errors
             }
         }
+
 
 
 
@@ -278,6 +283,9 @@ namespace TdaWebApp.Controllers
                     // Use the Update method to update the existing record
                     beersService.Update(id, updatedBeer);
 
+                    // Set a success message in TempData
+                    TempData["SuccessMessage"] = "Record updated successfully.";
+
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -301,6 +309,7 @@ namespace TdaWebApp.Controllers
 
 
 
+
         // GET: BeersController/Delete/5
         public ActionResult Delete(string id)
         {
@@ -316,6 +325,7 @@ namespace TdaWebApp.Controllers
             }
             return View(beer);
         }
+
 
         // POST: BeersController/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -333,6 +343,9 @@ namespace TdaWebApp.Controllers
 
                 beersService.Remove(beer.Id);
 
+                // Store success message in TempData
+                TempData["SuccessMessage"] = "Record deleted successfully.";
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -342,10 +355,41 @@ namespace TdaWebApp.Controllers
         }
 
 
+
         public ActionResult UploadJSON()
         {
             return View();
         }
+
+        //[HttpPost]
+        //public ActionResult UploadJSON(IFormFile file)
+        //{
+        //    try
+        //    {
+        //        if (file != null && file.Length > 0)
+        //        {
+        //            using (var reader = new StreamReader(file.OpenReadStream()))
+        //            {
+        //                var jsonContent = reader.ReadToEnd();
+        //                // Assuming your BeersService has a method to insert data from JSON
+        //                beersService.InsertFromJson(jsonContent);
+        //            }
+
+        //            ViewBag.Message = "File uploaded successfully.";
+        //        }
+        //        else
+        //        {
+        //            ViewBag.Message = "Please select a file.";
+        //        }
+
+        //        return View("UploadJSON");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        ViewBag.Message = $"Error: {ex.Message}";
+        //        return View("UploadJSON");
+        //    }
+        //}
 
         [HttpPost]
         public ActionResult UploadJSON(IFormFile file)
@@ -357,11 +401,10 @@ namespace TdaWebApp.Controllers
                     using (var reader = new StreamReader(file.OpenReadStream()))
                     {
                         var jsonContent = reader.ReadToEnd();
-                        // Assuming your BeersService has a method to insert data from JSON
-                        beersService.InsertFromJson(jsonContent);
-                    }
+                        var result = beersService.InsertFromJson(jsonContent);
 
-                    ViewBag.Message = "File uploaded successfully.";
+                        ViewBag.Message = $"File uploaded successfully. {result.RecordsUpdated} records updated, {result.RecordsInserted} records inserted.";
+                    }
                 }
                 else
                 {

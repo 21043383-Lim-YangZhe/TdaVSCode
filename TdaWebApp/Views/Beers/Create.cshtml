@@ -83,19 +83,26 @@
 
 
 
+
 @model TdaWebApp.Models.Beers
 
 @{
     ViewData["Title"] = "Create";
 }
-
+<style>
+    .light-purple-background {
+        background-color: #e6e6fa; /* Light purple color code */
+        padding: 15px; /* Add padding for better visibility */
+        border-radius: 10px; /* Optional: Add rounded corners */
+    }
+</style>
 <h1>Create Combination</h1>
 
 <h4>Criteria - The Drugs are listed in this format (Drug Name | Drug Class | Drug ID)</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" class="light-purple-background">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 

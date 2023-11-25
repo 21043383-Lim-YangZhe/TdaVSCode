@@ -1,4 +1,14 @@
-﻿
+﻿@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @successMessage
+    </div>
+}
+
 @model IEnumerable<TdaWebApp.Models.Beers>
 
 @{
@@ -120,9 +130,19 @@
                     @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>*@
                 <td width="20%">
-                    <a asp-action="Edit" asp-route-id="@item.Id">Update</a>
+                    @{
+                        // Check if DrugID contains multiple drug IDs
+                        var multipleDrugIDs = item.DrugID.Contains(",");
+                    }
+
+                    @if (multipleDrugIDs)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Update</a>
+                    }
+
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
+
         </tr>
 }
     </tbody>
