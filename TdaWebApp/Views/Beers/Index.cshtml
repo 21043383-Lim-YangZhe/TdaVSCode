@@ -21,14 +21,41 @@
     <a asp-action="Create">Create New Combination</a>&nbsp;&nbsp;<a asp-action="UploadJson">Upload JSON</a>
 </p>
 
-
 <div>
+    <form asp-action="Index" asp-route-searchTerm="@ViewData["SearchTerm"]" method="get">
+        <label for="searchTerm">Search:</label>
+        <input type="text" id="searchTerm" name="searchTerm" />
+
+        <label for="tableFilter">Table:</label>
+        <select id="tableFilter" name="tableFilter">
+            <option value="">All Tables</option>
+            <option value="2">Table 2</option>
+            <option value="3">Table 3</option>
+            <option value="4">Table 4</option>
+            <option value="5">Table 5</option>
+            <option value="6">Table 6</option>
+            <option value="7">Table 7</option>
+            <!-- Add options for other tables as needed -->
+            <option value="Combination">Combination</option>
+        </select>
+        <script>
+            var tableFilterValue = '@(ViewData["TableFilter"] ?? "")';
+            if (tableFilterValue) {
+                document.getElementById('tableFilter').value = tableFilterValue;
+            }
+        </script>
+        <input type="submit" value="Search" />
+    </form>
+</div>
+
+
+@* <div>
     <form asp-action="Index" asp-route-searchTerm="@ViewData["SearchTerm"]" method="get">
         <label for="searchTerm">Search:</label>
         <input type="text" id="searchTerm" name="searchTerm" />
         <input type="submit" value="Search" />
     </form>
-</div>
+</div> *@
 
 <table class="table">
     <thead>
@@ -83,51 +110,52 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DrugID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Drug)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DrugClass)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Crcl)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Disease)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Recommendation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rationale)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QualityEvidence)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StrengthRecommendation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Condition)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Age)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InteractingDrugOrClass)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dosage)
-            </td>
-            @*<td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DrugID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Drug)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DrugClass)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Crcl)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Disease)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Recommendation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rationale)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QualityEvidence)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StrengthRecommendation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Condition)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Age)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InteractingDrugOrClass)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dosage)
+                </td>
+                @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>*@
                 <td width="20%">
                     @{
@@ -143,10 +171,7 @@
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
 
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
-
-
-

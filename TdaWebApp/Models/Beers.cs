@@ -70,5 +70,7 @@ namespace TdaWebApp.Models
         [JsonPropertyName("dosage")]
         [BsonElement("dosage")]
         public string? Dosage { get; set; }
+
+
     }
 }

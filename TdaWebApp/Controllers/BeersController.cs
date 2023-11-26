@@ -21,8 +21,50 @@ namespace TdaWebApp.Controllers
             this.beersService = beersService;
         }
 
-        [Authorize]
-        public ActionResult Index(string searchTerm, string sortOrder, string sortBy)
+        //[Authorize]
+        //public ActionResult Index(string searchTerm, string sortOrder, string sortBy)
+        //{
+        //    IEnumerable<Beers> beers;
+
+        //    if (!string.IsNullOrEmpty(searchTerm))
+        //    {
+        //        // Filter records based on the search term
+        //        beers = beersService.Get().Where(b =>
+        //             b.DrugID?.Contains(searchTerm) == true ||
+        //             b.Drug?.Contains(searchTerm) == true ||
+        //             b.DrugClass?.Contains(searchTerm) == true ||
+        //             b.Crcl?.Contains(searchTerm) == true ||
+        //             b.Disease?.Contains(searchTerm) == true ||
+        //             b.Recommendation?.Contains(searchTerm) == true ||
+        //             b.Rationale?.Contains(searchTerm) == true ||
+        //             b.QualityEvidence?.Contains(searchTerm) == true ||
+        //             b.StrengthRecommendation?.Contains(searchTerm) == true ||
+        //             b.Condition?.Contains(searchTerm) == true ||
+        //             b.Age?.Contains(searchTerm) == true ||
+        //             b.InteractingDrugOrClass?.Contains(searchTerm) == true ||
+        //             b.Dosage?.Contains(searchTerm) == true
+        //        );
+
+        //        // Apply sorting to the filtered data
+        //        beers = ApplySorting(beers, sortOrder, sortBy);
+        //    }
+        //    else
+        //    {
+        //        // If no search term provided, get all records
+        //        beers = beersService.Get();
+
+        //        // Apply sorting to all records
+        //        beers = ApplySorting(beers, sortOrder, sortBy);
+        //    }
+
+        //    // Pass sorting information to the view
+        //    ViewData["SortOrder"] = sortOrder;
+        //    ViewData["SortBy"] = sortBy;
+
+        //    return View(beers);
+        //}
+
+        public ActionResult Index(string searchTerm, string sortOrder, string sortBy, string tableFilter)
         {
             IEnumerable<Beers> beers;
 
@@ -30,7 +72,7 @@ namespace TdaWebApp.Controllers
             {
                 // Filter records based on the search term
                 beers = beersService.Get().Where(b =>
-                     b.DrugID?.Contains(searchTerm) == true ||
+                    b.DrugID?.Contains(searchTerm) == true ||
                      b.Drug?.Contains(searchTerm) == true ||
                      b.DrugClass?.Contains(searchTerm) == true ||
                      b.Crcl?.Contains(searchTerm) == true ||
@@ -43,26 +85,41 @@ namespace TdaWebApp.Controllers
                      b.Age?.Contains(searchTerm) == true ||
                      b.InteractingDrugOrClass?.Contains(searchTerm) == true ||
                      b.Dosage?.Contains(searchTerm) == true
-                );
-
-                // Apply sorting to the filtered data
-                beers = ApplySorting(beers, sortOrder, sortBy);
+                    );
             }
             else
             {
                 // If no search term provided, get all records
                 beers = beersService.Get();
-
-                // Apply sorting to all records
-                beers = ApplySorting(beers, sortOrder, sortBy);
             }
 
-            // Pass sorting information to the view
+            // Apply additional filtering based on the table filter
+            if (!string.IsNullOrEmpty(tableFilter))
+            {
+                if (tableFilter == "Combination")
+                {
+                    // Filter records with multiple DrugIDs
+                    beers = beers.Where(b => b.DrugID.Contains(","));
+                }
+                else
+                {
+                    // Filter records based on the specified table number
+                    string tablePrefix = "b_t" + tableFilter + "_";
+                    beers = beers.Where(b => b.DrugID.StartsWith(tablePrefix));
+                }
+            }
+
+            // Apply sorting to the filtered data
+            beers = ApplySorting(beers, sortOrder, sortBy);
+
+            // Pass sorting and filtering information to the view
             ViewData["SortOrder"] = sortOrder;
             ViewData["SortBy"] = sortBy;
+            ViewData["TableFilter"] = tableFilter;
 
             return View(beers);
         }
+
 
         private IEnumerable<Beers> ApplySorting(IEnumerable<Beers> data, string sortOrder, string sortBy)
         {
@@ -90,6 +147,7 @@ namespace TdaWebApp.Controllers
 
 
         // GET: BeersController/Create
+        [Authorize]
         public ActionResult Create()
         {
             ViewBag.BeersList = beersService.Get(); // Assuming Get() returns a list of Beers
@@ -355,7 +413,7 @@ namespace TdaWebApp.Controllers
         }
 
 
-
+        [Authorize]
         public ActionResult UploadJSON()
         {
             return View();
@@ -391,6 +449,7 @@ namespace TdaWebApp.Controllers
         //    }
         //}
 
+       
         [HttpPost]
         public ActionResult UploadJSON(IFormFile file)
         {
@@ -419,6 +478,9 @@ namespace TdaWebApp.Controllers
                 return View("UploadJSON");
             }
         }
+
+     
+
 
 
 
