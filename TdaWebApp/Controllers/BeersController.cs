@@ -64,6 +64,7 @@ namespace TdaWebApp.Controllers
         //    return View(beers);
         //}
 
+        [Authorize]
         public ActionResult Index(string searchTerm, string sortOrder, string sortBy, string tableFilter)
         {
             IEnumerable<Beers> beers;
