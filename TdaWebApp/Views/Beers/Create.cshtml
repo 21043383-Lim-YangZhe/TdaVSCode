@@ -1,4 +1,5 @@
 ﻿
+
 @model TdaWebApp.Models.Beers
 
 @{
@@ -52,8 +53,6 @@
             }
 
 
-           
-
             <div class="form-group">
                 <label asp-for="Recommendation" class="control-label"></label>
                 <input asp-for="Recommendation" class="form-control" />
@@ -96,12 +95,9 @@
     <a asp-action="Index">Back to View all Beers/Combination</a>
 </div>
 
-@* @section Scripts {
+@section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-
- *@
-
 

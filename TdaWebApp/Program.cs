@@ -18,6 +18,7 @@ builder.Services.AddControllersWithViews();*/
 builder.Services.AddSingleton<BeersService>();
 
 
+
 var Configuration = builder.Configuration;
 var mongoDbSettings = Configuration.GetSection(nameof(MongoDbConfig)).Get<MongoDbConfig>();
 
