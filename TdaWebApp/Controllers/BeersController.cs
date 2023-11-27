@@ -370,6 +370,7 @@ namespace TdaWebApp.Controllers
 
 
         // GET: BeersController/Delete/5
+        [Authorize(Roles = "SuperAdmin")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -420,6 +421,8 @@ namespace TdaWebApp.Controllers
             return View();
         }
 
+
+
         //[HttpPost]
         //public ActionResult UploadJSON(IFormFile file)
         //{
@@ -430,11 +433,10 @@ namespace TdaWebApp.Controllers
         //            using (var reader = new StreamReader(file.OpenReadStream()))
         //            {
         //                var jsonContent = reader.ReadToEnd();
-        //                // Assuming your BeersService has a method to insert data from JSON
-        //                beersService.InsertFromJson(jsonContent);
-        //            }
+        //                var result = beersService.InsertFromJson(jsonContent);
 
-        //            ViewBag.Message = "File uploaded successfully.";
+        //                ViewBag.Message = $"File uploaded successfully. {result.RecordsUpdated} records updated, {result.RecordsInserted} records inserted.";
+        //            }
         //        }
         //        else
         //        {
@@ -450,7 +452,9 @@ namespace TdaWebApp.Controllers
         //    }
         //}
 
-       
+
+
+        // In BeersController.cs
         [HttpPost]
         public ActionResult UploadJSON(IFormFile file)
         {
@@ -463,7 +467,7 @@ namespace TdaWebApp.Controllers
                         var jsonContent = reader.ReadToEnd();
                         var result = beersService.InsertFromJson(jsonContent);
 
-                        ViewBag.Message = $"File uploaded successfully. {result.RecordsUpdated} records updated, {result.RecordsInserted} records inserted.";
+                        ViewBag.Message = $"File uploaded successfully. {result.RecordsUpdated} records updated, {result.RecordsInserted} records inserted, {result.RecordsSkipped} records skipped due to the DrugID being empty.";
                     }
                 }
                 else
@@ -479,7 +483,6 @@ namespace TdaWebApp.Controllers
                 return View("UploadJSON");
             }
         }
-
 
 
 

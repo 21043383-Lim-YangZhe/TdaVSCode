@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace TdaWebApp.Controllers
             this.roleManager = roleManager;
         }
 
-
+       
         public ViewResult Create() => View();
 
         [HttpPost]
@@ -46,6 +47,7 @@ namespace TdaWebApp.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "SuperAdmin")]
         public IActionResult CreateRole() => View();
 
         [HttpPost]
