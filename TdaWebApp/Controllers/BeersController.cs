@@ -71,6 +71,7 @@ namespace TdaWebApp.Controllers
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
+                searchTerm = searchTerm.ToLower(); // Convert the search string to lowercase
                 // Filter records based on the search term
                 beers = beersService.Get().Where(b =>
                     b.DrugID?.Contains(searchTerm) == true ||

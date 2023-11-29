@@ -55,8 +55,21 @@
                                     <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
                                 </li>
 
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="ChangePassword">Change Password</a>
+                                </li>
+
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-controller="User" asp-action="ManageUsers">Manage User</a>
+                                    </li>
+                                }
+
                             }
                         }
+                        
+       
                     </ul>
                 </div>
             </div>
