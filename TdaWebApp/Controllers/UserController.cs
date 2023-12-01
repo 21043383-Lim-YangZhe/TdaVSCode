@@ -36,7 +36,7 @@ namespace TdaWebApp.Controllers
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
                 // Add Role
-                await userManager.AddToRoleAsync(appUser, "SuperAdmin");
+                await userManager.AddToRoleAsync(appUser, "Admin");
 
                 if (result.Succeeded)
                     ViewBag.Message = "User Created Successfully";
