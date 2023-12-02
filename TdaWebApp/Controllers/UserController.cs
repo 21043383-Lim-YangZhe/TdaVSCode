@@ -22,11 +22,46 @@ namespace TdaWebApp.Controllers
        
         public ViewResult Create() => View();
 
+        //[HttpPost]
+        //public async Task<IActionResult> Create(User user)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        ApplicationUser appUser = new ApplicationUser
+        //        {
+        //            UserName = user.Name,
+        //            Email = user.Email
+        //        };
+
+        //        IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
+
+        //        // Add Role
+        //        await userManager.AddToRoleAsync(appUser, "Admin");
+
+        //        if (result.Succeeded)
+        //            ViewBag.Message = "User Created Successfully";
+        //        else
+        //        {
+        //            foreach (IdentityError error in result.Errors)
+        //                ModelState.AddModelError("", error.Description);
+        //        }
+        //    }
+        //    return View(user);
+        //}
+
         [HttpPost]
         public async Task<IActionResult> Create(User user)
         {
             if (ModelState.IsValid)
             {
+                // Check if the email already exists
+                var existingUser = await userManager.FindByEmailAsync(user.Email);
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("", "Email address is already in use.");
+                    return View(user);
+                }
+
                 ApplicationUser appUser = new ApplicationUser
                 {
                     UserName = user.Name,
@@ -35,19 +70,26 @@ namespace TdaWebApp.Controllers
 
                 IdentityResult result = await userManager.CreateAsync(appUser, user.Password);
 
-                // Add Role
-                await userManager.AddToRoleAsync(appUser, "Admin");
-
                 if (result.Succeeded)
+                {
+                    // Retrieve the user with security stamp from the database
+                    appUser = await userManager.FindByEmailAsync(user.Email);
+
+                    // Add Role
+                    await userManager.AddToRoleAsync(appUser, "Admin");
+
                     ViewBag.Message = "User Created Successfully";
+                }
                 else
                 {
                     foreach (IdentityError error in result.Errors)
                         ModelState.AddModelError("", error.Description);
                 }
             }
+
             return View(user);
         }
+
 
         [Authorize(Roles = "SuperAdmin")]
         public IActionResult CreateRole() => View();
@@ -156,6 +198,7 @@ namespace TdaWebApp.Controllers
             if (result.Succeeded)
             {
                 // Optionally, you can add a success message to ViewBag
+                TempData["SuccessMessage"] = "User deleted successfully.";
             }
             else
             {
