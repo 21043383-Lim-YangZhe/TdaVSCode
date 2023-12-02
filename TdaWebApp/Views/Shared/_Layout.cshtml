@@ -1,12 +1,4 @@
 ﻿
-<style>
-    .navbar-nav .nav-item {
-        border-right: 2px solid #ccc; /* Add a border to the right of each nav item */
-        padding-right: 10px; /* Add some padding to visually separate items */
-    }
-
-</style>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,18 +10,33 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TdaWebApp.styles.css" asp-append-version="true" />
 
+
     <style>
-        /* Add a custom style for the light green background */
-        .bg-light-green {
-            background-color: #c3e6cb;
+        /* Updated styles for the menu items */
+        .navbar-nav .nav-item {
+            background-color: #c3e6cb; /* Light green background color */
+            border-radius: 5px; /* Rounded corners */
+            margin: 5px; /* Add some margin for spacing */
         }
+
+            .navbar-nav .nav-item .nav-link {
+                color: #fff; /* Light font color */
+                padding: 10px 15px; /* Add padding to the links */
+                display: block;
+                text-decoration: none;
+            }
+
+                .navbar-nav .nav-item .nav-link:hover {
+                    background-color: #a3d1b8; /* Darker background on hover */
+                }
     </style>
+
 
 </head>
 <body>
     <header>
-   @*      <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3"> *@
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light-green border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        @* <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light-green border-bottom box-shadow mb-3"> *@
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Team-Care Deprescribing Application</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -47,7 +54,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Beers" asp-action="UploadJSON">Upload JSON</a>
                         </li>
-                        @{
+                        @* @{
                             if (User?.Identity?.IsAuthenticated ?? false)
                             {
                                 <li class="nav-item">
@@ -67,8 +74,29 @@
                                 }
 
                             }
+                        } *@
+
+                        @{
+                            if (User?.Identity?.IsAuthenticated ?? false)
+                            {
+                                <li class="nav-item">
+                                    <u style="color: black;">Welcome: @User.Identity.Name</u>
+                                    <a asp-controller="Account" asp-action="Logout" class="btn btn-danger">Logout</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="ChangePassword" style="color: black;">Change Password</a>
+                                </li>
+
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-controller="User" asp-action="ManageUsers" style="color: black;">Manage User</a>
+                                    </li>
+                                }
+                            }
                         }
-                        
+   
        
                     </ul>
                 </div>

@@ -2,9 +2,29 @@
     ViewData["Title"] = "Home Page";
 }
 
+<style>
+    .custom-font {
+        font-family: 'Roboto', sans-serif;
+        font-size: 1.2rem;
+        margin-top: 20px;
+    }
+
+        .custom-font a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .custom-font a:hover {
+                color: #0056b3;
+            }
+</style>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome to Team-Care Deprebscribing Application (TDA)</h1>
-    <p>
-        <a asp-controller="Beers" asp-action="Index">View all Beers</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a asp-controller="Beers" asp-action="Create">Create New Combination</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a asp-controller="Beers" asp-action="UploadJSON">Upload JSON</a>
+    <h1 class="display-4">Welcome to Team-Care Deprescribing Application (TDA)</h1>
+    <p class="custom-font">
+        <a asp-controller="Beers" asp-action="Index">View all Beers</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a asp-controller="Beers" asp-action="Create">Create New Combination</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a asp-controller="Beers" asp-action="UploadJSON">Upload JSON</a>
     </p>
 </div>

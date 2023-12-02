@@ -1,4 +1,4 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@* @using Microsoft.AspNetCore.Identity
 @model List<dynamic>
 
 @{
@@ -43,7 +43,132 @@
                     <a asp-action="EditUserRoles" asp-route-userId="@user.Id">Edit Roles</a> |
 
                     <!-- Add confirmation prompt for Delete action -->
-                    <button type="button" class="btn btn-link" onclick="confirmDelete('@user.Id')">Delete User</button>
+                    <button type="button" class="btn btn-link" onclick="confirmDelete('@user.Id', '@user.UserName')">Delete User</button>
+
+
+                    <form id="deleteForm-@user.Id" asp-action="DeleteUser" method="post" style="display:none;">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<script>
+    function confirmDelete(userId, username) {
+        var confirmation = confirm("Are you sure you want to delete the user '" + username + "'?");
+        if (confirmation) {
+            document.getElementById('deleteForm-' + userId).submit();
+        }
+    }
+</script> *@
+
+
+
+@using Microsoft.AspNetCore.Identity
+@model List<dynamic>
+
+@{
+    ViewData["Title"] = "ManageUsers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .alert {
+        font-size: 1rem;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+
+        .table th,
+        .table td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+
+    .badge-info {
+        background-color: #5bc0de;
+        color: #fff;
+        margin-right: 5px;
+        padding: 0.5rem;
+        border-radius: 5px;
+    }
+
+    .btn-link {
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+        .btn-link:hover {
+            color: #0056b3;
+        }
+</style>
+
+<h1>Manage Users</h1>
+
+<p>
+    <a asp-action="CreateRole">Create Role</a>
+</p>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var user = item.User;
+            var roles = item.Roles;
+
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @foreach (var role in roles)
+                    {
+                        <span class="badge badge-info">@role</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="EditUserRoles" asp-route-userId="@user.Id">Edit Roles</a> |
+
+                    <!-- Add confirmation prompt for Delete action -->
+                    <button type="button" class="btn btn-link" onclick="confirmDelete('@user.Id', '@user.UserName')">Delete User</button>
 
                     <form id="deleteForm-@user.Id" asp-action="DeleteUser" method="post" style="display:none;">
                         <input type="hidden" name="userId" value="@user.Id" />
@@ -55,8 +180,8 @@
 </table>
 
 <script>
-    function confirmDelete(userId) {
-        var confirmation = confirm("Are you sure you want to delete this user?");
+    function confirmDelete(userId, username) {
+        var confirmation = confirm("Are you sure you want to delete the user '" + username + "'?");
         if (confirmation) {
             document.getElementById('deleteForm-' + userId).submit();
         }

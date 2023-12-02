@@ -1,4 +1,4 @@
-﻿@model EditUserRolesViewModel
+﻿@* @model EditUserRolesViewModel
 @{
     ViewData["Title"] = "EditUserRoles";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -12,5 +12,61 @@
         <label asp-for="SelectedRoles">Roles</label>
         <select asp-for="SelectedRoles" asp-items="new SelectList(Model.AllRoles)" multiple class="form-control"></select>
     </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form> *@
+
+
+
+@model EditUserRolesViewModel
+@{
+    ViewData["Title"] = "EditUserRoles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 1rem;
+        margin-bottom: 5px;
+    }
+
+    select.form-control {
+        border-radius: 8px;
+        font-size: 1rem;
+        padding: 10px;
+        height: auto;
+    }
+
+    button.btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 8px;
+    }
+
+        button.btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+</style>
+
+<h2>Edit User Roles - @Model.UserName</h2>
+
+<form asp-action="EditUserRoles" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <div class="form-group">
+        <label asp-for="SelectedRoles">Roles</label>
+        <select asp-for="SelectedRoles" asp-items="new SelectList(Model.AllRoles)" multiple class="form-control"></select>
+    </div>
+    <br>
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
