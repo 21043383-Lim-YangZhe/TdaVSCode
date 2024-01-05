@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson.IO;
 using MongoDB_API.Models;
 using MongoDB_API.Services;
 
@@ -17,7 +18,10 @@ namespace MongoDB_API.Controllers
         [HttpGet]
         public async Task<List<Beers>> Get()
         {
-            return await _beersService.GetAsync();
+            //return await _beersService.GetAsync();
+            List<Beers> result = new List<Beers>();
+            result.Add(new Beers() { Age=90});;
+            return result;
         }
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Beers>> Get(string id)

@@ -19,7 +19,7 @@ namespace TdaWebApp.Controllers
             this.roleManager = roleManager;
         }
 
-       
+        [Authorize(Roles = "SuperAdmin")]
         public ViewResult Create() => View();
 
         //[HttpPost]
