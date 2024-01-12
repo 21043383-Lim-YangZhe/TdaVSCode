@@ -4,7 +4,7 @@
   "parameters": {
     "resourceGroupName": {
       "type": "string",
-      "defaultValue": "C300",
+      "defaultValue": "TdaAPI",
       "metadata": {
         "_parameterType": "resourceGroup",
         "description": "Name of the resource group for the resource. It is recommended to put resources under same resource group for better tracking."
@@ -49,17 +49,17 @@
           "contentVersion": "1.0.0.0",
           "resources": [
             {
-              "name": "MongoDBAPITDA",
+              "name": "apitda",
               "type": "Microsoft.ApiManagement/service",
               "location": "[parameters('resourceLocation')]",
               "properties": {
-                "publisherEmail": "21043383@myrp.edu.sg",
-                "publisherName": "LIM YANG ZHE",
+                "publisherEmail": "lim.yangzhe24@outlook.com",
+                "publisherName": "Yang Zhe",
                 "notificationSenderEmail": "apimgmt-noreply@mail.windowsazure.com",
                 "hostnameConfigurations": [
                   {
                     "type": "Proxy",
-                    "hostName": "mongodbapitda.azure-api.net",
+                    "hostName": "apitda.azure-api.net",
                     "encodedCertificate": null,
                     "keyVaultId": null,
                     "certificatePassword": null,
@@ -95,7 +95,7 @@
             },
             {
               "type": "Microsoft.ApiManagement/service/apis",
-              "name": "MongoDBAPITDA/MongoDBAPI",
+              "name": "apitda/MongoDBAPI",
               "properties": {
                 "displayName": "MongoDBAPI",
                 "apiRevision": "1",
@@ -118,7 +118,7 @@
               },
               "apiVersion": "2019-12-01",
               "dependsOn": [
-                "MongoDBAPITDA"
+                "apitda"
               ]
             }
           ]

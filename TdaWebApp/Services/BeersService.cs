@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using MongoDB.Driver;
 using TdaWebApp.Models;
 using Newtonsoft.Json;
+using TdaWebApp.Settings;
 
 namespace TdaWebApp.Services
 {
@@ -15,12 +16,23 @@ namespace TdaWebApp.Services
     {
         private readonly IMongoCollection<Beers> beers;
 
-        public BeersService(IConfiguration config)
+        //public BeersService(IConfiguration config)
+        //{
+        //    MongoClient client = new(config.GetConnectionString("mydb"));
+        //    IMongoDatabase database = client.GetDatabase("mydb");
+        //    beers = database.GetCollection<Beers>("beers");
+        //}
+
+        private readonly string connectionString;
+
+        public BeersService(IMongoDbConfig mongoDbConfig)
         {
-            MongoClient client = new(config.GetConnectionString("mydb"));
-            IMongoDatabase database = client.GetDatabase("mydb");
+            connectionString = mongoDbConfig.ConnectionString;
+            MongoClient client = new MongoClient(connectionString);
+            IMongoDatabase database = client.GetDatabase(mongoDbConfig.Name);
             beers = database.GetCollection<Beers>("beers");
         }
+
 
         public List<Beers> Get()
         {

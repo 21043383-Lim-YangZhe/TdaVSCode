@@ -12,17 +12,27 @@ namespace MongoDB_API.Controllers
     {
         private readonly BeersService _beersService;
 
-        public BeersController(BeersService booksService) =>
-            _beersService = booksService;
+        public BeersController(BeersService beersService) =>
+            _beersService = beersService;
 
         [HttpGet]
-        public async Task<List<Beers>> Get()
-        {
-            //return await _beersService.GetAsync();
-            List<Beers> result = new List<Beers>();
-            result.Add(new Beers() { Age=90});;
-            return result;
-        }
+        public async Task<List<Beers>> Get() =>
+      await _beersService.GetAsync();
+
+        //[HttpGet]
+        //public async Task<List<Beers>> Get()
+        //{
+        //    //return await _beersService.GetAsync();
+        //    List<Beers> result = new List<Beers>();
+        //    result.Add(new Beers() {Id="655df74ea7e3f76d0a818073", DrugID = "b_t3_r8", Drug= "Chlorpromazine", 
+        //        DrugClass= "Antipsychotics", Crcl= "", Disease= "Syncope", Recommendation= "Avoid",
+        //        Rationale= "Increased risk of orthostatic hypotension",
+        //        StrengthRecommendation ="Weak", QualityEvidence= "High"});;
+        //    return result;
+        //}
+
+
+
         [HttpGet("{id:length(24)}")]
         public async Task<ActionResult<Beers>> Get(string id)
         {
@@ -47,14 +57,14 @@ namespace MongoDB_API.Controllers
         [HttpPut("{id:length(24)}")]
         public async Task<IActionResult> Update(string id, Beers updatedBeers)
         {
-            var book = await _beersService.GetAsync(id);
+            var beers = await _beersService.GetAsync(id);
 
-            if (book is null)
+            if (beers is null)
             {
                 return NotFound();
             }
 
-            updatedBeers.Id = book.Id;
+            updatedBeers.Id = beers.Id;
 
             await _beersService.UpdateAsync(id, updatedBeers);
 
@@ -75,5 +85,7 @@ namespace MongoDB_API.Controllers
 
             return NoContent();
         }
+
+
     }
 }

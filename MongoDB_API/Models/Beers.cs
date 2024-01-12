@@ -30,7 +30,7 @@ namespace MongoDB_API.Models
         [JsonPropertyName("disease")]
         [BsonElement("disease")]
         public string? Disease { get; set; }
-        [JsonPropertyName("recommendtion")]
+        [JsonPropertyName("recommendation")]
         [BsonElement("recommendation")]
         public string Recommendation { get; set; } = null!;
         [JsonPropertyName("rationale")]

@@ -19,7 +19,7 @@ namespace TdaWebApp.Controllers
             this.roleManager = roleManager;
         }
 
-        [Authorize(Roles = "SuperAdmin")]
+        //[Authorize(Roles = "SuperAdmin")]
         public ViewResult Create() => View();
 
         //[HttpPost]
@@ -76,7 +76,7 @@ namespace TdaWebApp.Controllers
                     appUser = await userManager.FindByEmailAsync(user.Email);
 
                     // Add Role
-                    await userManager.AddToRoleAsync(appUser, "Admin");
+                    await userManager.AddToRoleAsync(appUser, "SuperAdmin");
 
                     ViewBag.Message = "User Created Successfully";
                 }
