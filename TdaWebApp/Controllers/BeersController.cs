@@ -475,6 +475,13 @@ namespace TdaWebApp.Controllers
             {
                 if (file != null && file.Length > 0)
                 {
+                    // Check if the uploaded file has a .json extension
+                    if (!file.FileName.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+                    {
+                        ViewBag.Message = "Please upload a valid JSON file.";
+                        return View("UploadJSON");
+                    }
+
                     using (var reader = new StreamReader(file.OpenReadStream()))
                     {
                         var jsonContent = reader.ReadToEnd();
@@ -496,6 +503,7 @@ namespace TdaWebApp.Controllers
                 return View("UploadJSON");
             }
         }
+
 
 
 
