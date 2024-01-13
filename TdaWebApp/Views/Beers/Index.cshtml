@@ -15,7 +15,7 @@
     ViewData["Title"] = "Beers Table";
 }
 
-<h1>Beers Table</h1>
+<h1>Beers and Combination Table</h1>
 
 <p>
     <a asp-action="Create">Create New Combination</a>&nbsp;&nbsp;<a asp-action="UploadJson">Upload JSON</a>
@@ -150,6 +150,7 @@
             @Html.ActionLink("Delete", "Delete", new { id=item.Id })
             </td>*@
                 <td width="20%">
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                     @{
                         // Check if DrugID contains multiple drug IDs
                         var multipleDrugIDs = item.DrugID.Contains(",");
@@ -158,9 +159,12 @@
                     @if (multipleDrugIDs)
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Update</a>
+                        
                     }
-
+                    @if (User.IsInRole("SuperAdmin"))
+                    {
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
                 </td>
 
             </tr>

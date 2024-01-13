@@ -144,10 +144,20 @@ namespace TdaWebApp.Controllers
 
 
         // GET: BeersController/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(string id)
          {
-             return View();
-         }
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var beer = beersService.Get(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+            return View(beer);
+        }
 
 
         // GET: BeersController/Create

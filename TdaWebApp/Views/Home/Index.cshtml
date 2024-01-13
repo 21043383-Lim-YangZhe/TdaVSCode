@@ -3,28 +3,51 @@
 }
 
 <style>
+    body {
+        background-color: #aed9e0; /* Pastel blue background */
+        color: #4d4d4d; /* Dark gray font color */
+        font-family: 'Lato', sans-serif; /* Sleeker font style */
+    }
+
     .custom-font {
-        font-family: 'Roboto', sans-serif;
         font-size: 1.2rem;
         margin-top: 20px;
     }
 
         .custom-font a {
-            color: #007bff;
+            color: #3498db; /* Sleek blue font color */
             text-decoration: none;
             font-weight: bold;
         }
 
             .custom-font a:hover {
-                color: #0056b3;
+                color: #2980b9; /* Slightly darker blue on hover */
             }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .display-4 {
+        margin-top: 50px; /* Adjust margin as needed */
+    }
+
+    /* Style for the image */
+    .tda-image {
+        max-width: 80%; /* Reduce the width to 80% of the container */
+        height: auto;
+        margin-top: 20px;
+    }
 </style>
 
 <div class="text-center">
     <h1 class="display-4">Welcome to Team-Care Deprescribing Application (TDA)</h1>
     <p class="custom-font">
-        <a asp-controller="Beers" asp-action="Index">View all Beers</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <a asp-controller="Beers" asp-action="Index">View all Beers/Combination</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a asp-controller="Beers" asp-action="Create">Create New Combination</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a asp-controller="Beers" asp-action="UploadJSON">Upload JSON</a>
     </p>
+
+    <!-- Image tag to display the image -->
+    <img src="~/images/tda_tablet.jpg" class="tda-image" alt="TDA Tablet Image">
 </div>

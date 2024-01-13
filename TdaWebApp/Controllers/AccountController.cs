@@ -63,6 +63,39 @@ namespace TdaWebApp.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //[Authorize]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var user = await userManager.GetUserAsync(User);
+
+        //        if (user == null)
+        //        {
+        //            return NotFound();
+        //        }
+
+        //        var changePasswordResult = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+        //        if (changePasswordResult.Succeeded)
+        //        {
+        //            ViewBag.SuccessMessage = "Password changed successfully.";
+        //        }
+        //        else
+        //        {
+        //            foreach (var error in changePasswordResult.Errors)
+        //            {
+        //                ModelState.AddModelError("", error.Description);
+        //            }
+        //        }
+        //    }
+
+        //    return View(model);
+        //}
+
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -75,6 +108,13 @@ namespace TdaWebApp.Controllers
                 if (user == null)
                 {
                     return NotFound();
+                }
+
+                // Check if the new password is the same as the current password
+                if (await userManager.CheckPasswordAsync(user, model.NewPassword))
+                {
+                    ModelState.AddModelError(nameof(model.NewPassword), "New password must be different from the current password.");
+                    return View(model);
                 }
 
                 var changePasswordResult = await userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
