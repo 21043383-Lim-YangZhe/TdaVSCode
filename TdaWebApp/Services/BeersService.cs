@@ -68,45 +68,6 @@ namespace TdaWebApp.Services
 
 
         // In BeersService.cs
-        //public (int RecordsUpdated, int RecordsInserted) InsertFromJson(string jsonContent)
-        //{
-        //    var beersList = JsonConvert.DeserializeObject<List<Beers>>(jsonContent);
-
-        //    int recordsUpdated = 0;
-        //    int recordsInserted = 0;
-
-        //    foreach (var beer in beersList)
-        //    {
-        //        // Check if the Id is a valid ObjectId; if not, generate a new one
-        //        if (!ObjectId.TryParse(beer.Id, out _))
-        //        {
-        //            beer.Id = ObjectId.GenerateNewId().ToString();
-        //        }
-
-        //        // Check if a record with the same DrugID already exists
-        //        var existingRecord = beers.Find(beerInDb => beerInDb.DrugID == beer.DrugID).FirstOrDefault();
-
-        //        if (existingRecord != null)
-        //        {
-        //            // If a record with the same DrugID exists, update it
-        //            beer.Id = existingRecord.Id; // Ensure the correct ID is set
-        //            beers.ReplaceOne(beerInDb => beerInDb.Id == existingRecord.Id, beer);
-        //            recordsUpdated++;
-        //        }
-        //        else
-        //        {
-        //            // If no record with the same DrugID exists, insert a new record
-        //            beers.InsertOne(beer);
-        //            recordsInserted++;
-        //        }
-        //    }
-
-        //    return (recordsUpdated, recordsInserted);
-        //}
-
-
-
-        // In BeersService.cs
         public (int RecordsUpdated, int RecordsInserted, int RecordsSkipped) InsertFromJson(string jsonContent)
         {
             var beersList = JsonConvert.DeserializeObject<List<Beers>>(jsonContent);

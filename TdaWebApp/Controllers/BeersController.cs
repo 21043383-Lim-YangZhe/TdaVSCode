@@ -21,50 +21,6 @@ namespace TdaWebApp.Controllers
             this.beersService = beersService;
         }
 
-        [Authorize]
-        //public ActionResult Index(string searchTerm, string sortOrder, string sortBy)
-        //{
-        //    IEnumerable<Beers> beers;
-
-        //    if (!string.IsNullOrEmpty(searchTerm))
-        //    {
-        //        // Filter records based on the search term
-        //        beers = beersService.Get().Where(b =>
-        //             b.DrugID?.Contains(searchTerm) == true ||
-        //             b.Drug?.Contains(searchTerm) == true ||
-        //             b.DrugClass?.Contains(searchTerm) == true ||
-        //             b.Crcl?.Contains(searchTerm) == true ||
-        //             b.Disease?.Contains(searchTerm) == true ||
-        //             b.Recommendation?.Contains(searchTerm) == true ||
-        //             b.Rationale?.Contains(searchTerm) == true ||
-        //             b.QualityEvidence?.Contains(searchTerm) == true ||
-        //             b.StrengthRecommendation?.Contains(searchTerm) == true ||
-        //             b.Condition?.Contains(searchTerm) == true ||
-        //             b.Age?.Contains(searchTerm) == true ||
-        //             b.InteractingDrugOrClass?.Contains(searchTerm) == true ||
-        //             b.Dosage?.Contains(searchTerm) == true
-        //        );
-
-        //        // Apply sorting to the filtered data
-        //        beers = ApplySorting(beers, sortOrder, sortBy);
-        //    }
-        //    else
-        //    {
-        //        // If no search term provided, get all records
-        //        beers = beersService.Get();
-
-        //        // Apply sorting to all records
-        //        beers = ApplySorting(beers, sortOrder, sortBy);
-        //    }
-
-        //    // Pass sorting information to the view
-        //    ViewData["SortOrder"] = sortOrder;
-        //    ViewData["SortBy"] = sortBy;
-
-        //    return View(beers);
-        //}
-
-
 
         [Authorize]
         public ActionResult Index(string searchTerm, string sortOrder, string sortBy, string tableFilter)
@@ -268,58 +224,6 @@ namespace TdaWebApp.Controllers
 
 
 
-
-
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(string id, Beers updatedBeer, string[] SelectedDrugs)
-        //{
-        //    try
-        //    {
-        //        if (id != updatedBeer.Id)
-        //        {
-        //            return NotFound();
-        //        }
-
-        //        // Check for duplicate record
-        //        if (IsDuplicateRecord(updatedBeer))
-        //        {
-        //            ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
-        //            ViewBag.BeersList = beersService.Get();
-        //            return View(updatedBeer);
-        //        }
-
-        //        if (ModelState.IsValid)
-        //        {
-        //            // Assuming you have a method to retrieve a concatenated string of drug IDs
-        //            updatedBeer.DrugID = GetSelectedDrugIDs(SelectedDrugs);
-
-        //            // Use the Update method to update the existing record
-        //            beersService.Update(id, updatedBeer);
-
-        //            return RedirectToAction(nameof(Index));
-        //        }
-
-        //        ViewBag.BeersList = beersService.Get();
-        //        return View(updatedBeer);
-        //    }
-        //    catch (MongoWriteException ex)
-        //    {
-        //        // Handle MongoDB duplicate key error
-        //        if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
-        //        {
-        //            ModelState.AddModelError(string.Empty, "A record with the same criteria already exists. Please review your entries.");
-        //            ViewBag.BeersList = beersService.Get();
-        //            return View(updatedBeer);
-        //        }
-
-        //        // Handle other MongoDB write errors if needed
-        //        throw; // Re-throw the exception for other unexpected errors
-        //    }
-        //}
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(string id, Beers updatedBeer, string[] SelectedDrugs)
@@ -433,37 +337,6 @@ namespace TdaWebApp.Controllers
         {
             return View();
         }
-
-
-
-        [HttpPost]
-        //public ActionResult UploadJSON(IFormFile file)
-        //{
-        //    try
-        //    {
-        //        if (file != null && file.Length > 0)
-        //        {
-        //            using (var reader = new StreamReader(file.OpenReadStream()))
-        //            {
-        //                var jsonContent = reader.ReadToEnd();
-        //                var result = beersService.InsertFromJson(jsonContent);
-
-        //                ViewBag.Message = $"File uploaded successfully. {result.RecordsUpdated} records updated, {result.RecordsInserted} records inserted.";
-        //            }
-        //        }
-        //        else
-        //        {
-        //            ViewBag.Message = "Please select a file.";
-        //        }
-
-        //        return View("UploadJSON");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.Message = $"Error: {ex.Message}";
-        //        return View("UploadJSON");
-        //    }
-        //}
 
 
 

@@ -1,33 +1,4 @@
-﻿@* 
-@{
-    ViewData["Title"] = "Login";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>Login</h1>
-
-<div class="text-danger" asp-validation-summary="All"></div>
-
-<form method="post">
-    <div class="form-group">
-        <label>Email</label>
-        <input name="email" class="form-control" />
-    </div>
-    <br />
-    <div class="form-group">
-        <label>Password</label>
-        <input name="password" type="password" class="form-control" />
-    </div>
-    <br />
-    <button class="btn btn-primary" type="submit">Sign In</button>
-    <br />
-    <div class="text-container">
-        <text>Need an account?</text> <a asp-controller="User" asp-action="Create">Click to create account</a>
-    </div>
-</form> *@
-
-
-@{
+﻿@{
     ViewData["Title"] = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
