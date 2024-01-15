@@ -126,6 +126,7 @@ namespace TdaWebApp.Controllers
 
 
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Beers beers, string[] SelectedDrugs)
@@ -152,6 +153,10 @@ namespace TdaWebApp.Controllers
                 {
                     // Assuming you have a method to retrieve a concatenated string of drug IDs
                     beers.DrugID = GetSelectedDrugIDs(SelectedDrugs);
+
+                    // Combine selected drug names into the "Drug" field
+                    beers.Drug = string.Join(",", SelectedDrugs.Select(drugId => GetDrugNameById(drugId)));
+
                     beersService.Create(beers);
 
                     // Set a success message in TempData
@@ -178,10 +183,18 @@ namespace TdaWebApp.Controllers
             }
         }
 
+        // Helper method to get drug name by ID
+        private string GetDrugNameById(string drugId)
+        {
+            // Fetch the drug name from your data source using the drugId
+            var drug = beersService.Get().FirstOrDefault(b => b.DrugID == drugId);
+            return drug?.Drug ?? string.Empty;
+        }
 
 
 
-        // Helper method to concatenate selected drug IDs
+
+        //Helper method to concatenate selected drug IDs
         private string GetSelectedDrugIDs(string[] selectedDrugs)
         {
             // Concatenate selected drug IDs with a comma separator
@@ -224,6 +237,7 @@ namespace TdaWebApp.Controllers
 
 
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(string id, Beers updatedBeer, string[] SelectedDrugs)
@@ -256,6 +270,9 @@ namespace TdaWebApp.Controllers
                     // Assuming you have a method to retrieve a concatenated string of drug IDs
                     updatedBeer.DrugID = GetSelectedDrugIDs(SelectedDrugs);
 
+                    // Combine selected drug names into the "Drug" field
+                    updatedBeer.Drug = string.Join(",", SelectedDrugs.Select(drugId => GetDrugNameById(drugId)));
+
                     // Use the Update method to update the existing record
                     beersService.Update(id, updatedBeer);
 
@@ -282,7 +299,6 @@ namespace TdaWebApp.Controllers
                 throw; // Re-throw the exception for other unexpected errors
             }
         }
-
 
 
 
