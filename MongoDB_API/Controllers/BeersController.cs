@@ -87,5 +87,22 @@ namespace MongoDB_API.Controllers
         }
 
 
+        [HttpGet("recommendation/{id:length(24)}")]
+        public async Task<ActionResult<string>> GetDrugRecommendation(string id)
+        {
+            var beers = await _beersService.GetAsync(id);
+
+            if (beers is null)
+            {
+                return NotFound();
+            }
+
+            // Assuming you have a property in your Beers class that contains the drug recommendation.
+            string drugRecommendation = beers.Recommendation;
+
+            return drugRecommendation;
+        }
+
+
     }
 }
