@@ -104,5 +104,36 @@ namespace MongoDB_API.Controllers
         }
 
 
+        [HttpGet("recommendation")]
+        public async Task<ActionResult<List<string>>> GetDrugRecommendations([FromQuery] string ids)
+        {
+            if (string.IsNullOrWhiteSpace(ids))
+            {
+                return BadRequest("Please provide a comma-separated list of drug IDs.");
+            }
+
+            var idList = ids.Split(',');
+
+            var recommendations = new List<string>();
+
+            foreach (var id in idList)
+            {
+                var beers = await _beersService.GetAsync(id);
+
+                if (beers != null)
+                {
+                    recommendations.Add(beers.Recommendation);
+                }
+                else
+                {
+                    recommendations.Add($"No recommendation found for drug with ID: {id}");
+                }
+            }
+
+            return recommendations;
+        }
+
+
+
     }
 }
