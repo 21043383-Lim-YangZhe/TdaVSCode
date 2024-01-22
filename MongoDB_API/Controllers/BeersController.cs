@@ -87,25 +87,8 @@ namespace MongoDB_API.Controllers
         }
 
 
-        [HttpGet("recommendation/{id:length(24)}")]
-        public async Task<ActionResult<string>> GetDrugRecommendation(string id)
-        {
-            var beers = await _beersService.GetAsync(id);
-
-            if (beers is null)
-            {
-                return NotFound();
-            }
-
-            // Assuming you have a property in your Beers class that contains the drug recommendation.
-            string drugRecommendation = beers.Recommendation;
-
-            return drugRecommendation;
-        }
-
-
-        [HttpGet("recommendation")]
-        public async Task<ActionResult<List<string>>> GetDrugRecommendations([FromQuery] string ids)
+        [HttpGet("recommendation-with-name")]
+        public async Task<ActionResult<List<string>>> GetDrugRecommendationsWithName([FromQuery] string ids)
         {
             if (string.IsNullOrWhiteSpace(ids))
             {
@@ -114,7 +97,7 @@ namespace MongoDB_API.Controllers
 
             var idList = ids.Split(',');
 
-            var recommendations = new List<string>();
+            var recommendationsWithName = new List<string>();
 
             foreach (var id in idList)
             {
@@ -122,16 +105,64 @@ namespace MongoDB_API.Controllers
 
                 if (beers != null)
                 {
-                    recommendations.Add(beers.Recommendation);
+                    string recommendationWithName = $"{beers.Drug} - {beers.Recommendation}";
+                    recommendationsWithName.Add(recommendationWithName);
                 }
                 else
                 {
-                    recommendations.Add($"No recommendation found for drug with ID: {id}");
+                    recommendationsWithName.Add($"No recommendation found for drug with ID: {id}");
                 }
             }
 
-            return recommendations;
+            return recommendationsWithName;
         }
+
+
+        //[HttpGet("recommendation/{id:length(24)}")]
+        //public async Task<ActionResult<string>> GetDrugRecommendation(string id)
+        //{
+        //    var beers = await _beersService.GetAsync(id);
+
+        //    if (beers is null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Assuming you have a property in your Beers class that contains the drug recommendation.
+        //    string drugRecommendation = beers.Recommendation;
+
+        //    return drugRecommendation;
+        //}
+
+
+        //[HttpGet("recommendation")]
+        //public async Task<ActionResult<List<string>>> GetDrugRecommendations([FromQuery] string ids)
+        //{
+        //    if (string.IsNullOrWhiteSpace(ids))
+        //    {
+        //        return BadRequest("Please provide a comma-separated list of drug IDs.");
+        //    }
+
+        //    var idList = ids.Split(',');
+
+        //    var recommendations = new List<string>();
+
+        //    foreach (var id in idList)
+        //    {
+        //        var beers = await _beersService.GetAsync(id);
+
+        //        if (beers != null)
+        //        {
+        //            recommendations.Add(beers.Recommendation);
+        //        }
+        //        else
+        //        {
+        //            recommendations.Add($"No recommendation found for drug with ID: {id}");
+        //        }
+        //    }
+
+        //    return recommendations;
+        //}
 
 
 
